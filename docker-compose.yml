@@ -24,6 +24,18 @@ services:
     volumes:
       - "./letsencrypt:/letsencrypt"
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
+  backend:
+    build:
+      context: demo-backend
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    restart: always
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.whoami.rule=Host(`teacher.assimilate.be`) && PathPrefix(`/api`)"
+      - "traefik.http.routers.whoami.entrypoints=websecure"
+      - "traefik.http.routers.whoami.tls.certresolver=myresolver"
 
   whoami:
     image: "traefik/whoami"
