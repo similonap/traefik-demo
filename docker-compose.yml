@@ -20,7 +20,6 @@ services:
     ports:
       - "80:80"
       - "443:443"
-      - "8080:8080"
     volumes:
       - "./letsencrypt:/letsencrypt"
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
@@ -33,15 +32,18 @@ services:
     restart: always
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.whoami.rule=Host(`teacher.assimilate.be`) && PathPrefix(`/api`)"
-      - "traefik.http.routers.whoami.entrypoints=websecure"
-      - "traefik.http.routers.whoami.tls.certresolver=myresolver"
-
-  whoami:
-    image: "traefik/whoami"
-    container_name: "simple-service"
+      - "traefik.http.routers.backend.rule=Host(`teacher.assimilate.be`) && PathPrefix(`/api`)"
+      - "traefik.http.routers.backend.entrypoints=websecure"
+      - "traefik.http.routers.backend.tls.certresolver=myresolver"
+  frontend:
+    build:
+      context: demo-frontend
+      dockerfile: Dockerfile
+    ports:
+      - "8081:80"
+    restart: always
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.whoami.rule=Host(`teacher.assimilate.be`) && PathPrefix(`/whoami`)"
-      - "traefik.http.routers.whoami.entrypoints=websecure"
-      - "traefik.http.routers.whoami.tls.certresolver=myresolver"
+      - "traefik.http.routers.frontend.rule=Host(`teacher.assimilate.be`)"
+      - "traefik.http.routers.frontend.entrypoints=websecure"
+      - "traefik.http.routers.frontend.tls.certresolver=myresolver"
