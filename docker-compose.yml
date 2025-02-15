@@ -19,12 +19,12 @@ services:
       - --entrypoints.websecure.address=:443
       - --entrypoints.websecure.asDefault=true 
       - --entrypoints.websecure.http.tls.certresolver=myresolver
-      - --certificatesresolvers.myresolver.acme.email=andie.similon@gmail.com
+      - --certificatesresolvers.myresolver.acme.email=jon.doe@acme.com
       - --certificatesresolvers.myresolver.acme.tlschallenge=true
       - --certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json
     labels:
       - traefik.enable=true
-      - traefik.http.routers.mydashboard.rule=Host(`teacher-2.assimilate.be`)
+      - traefik.http.routers.mydashboard.rule=Host(`admin.traefik.me`)
       - traefik.http.routers.mydashboard.service=api@internal
       - traefik.http.routers.mydashboard.middlewares=myauth
       - traefik.http.middlewares.myauth.basicauth.users=test:$$2y$$05$$qNEZjfNjeMqZb/OPp0qaQ.ht2l18hekn3NGbzepKVe1H2I39kMgWW/
@@ -39,7 +39,7 @@ services:
     restart: always
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.backend.rule=Host(`teacher.assimilate.be`) && PathPrefix(`/api`)"
+      - "traefik.http.routers.backend.rule=Host(`app.traefik.me`) && PathPrefix(`/api`)"
       - "traefik.http.routers.backend.entrypoints=websecure"
       - "traefik.http.routers.backend.tls.certresolver=myresolver"
     networks:
@@ -53,7 +53,7 @@ services:
     restart: always
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.frontend.rule=Host(`teacher.assimilate.be`)"
+      - "traefik.http.routers.frontend.rule=Host(`app.traefik.me`)"
       - "traefik.http.routers.frontend.entrypoints=websecure"
       - "traefik.http.routers.frontend.tls.certresolver=myresolver"
     networks:
