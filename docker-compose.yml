@@ -34,6 +34,8 @@ services:
     build:
       context: demo-backend
       dockerfile: Dockerfile
+    depends_on:
+      - db
     ports:
       - "8082:8082"
     restart: always
@@ -48,6 +50,8 @@ services:
     build:
       context: demo-frontend
       dockerfile: Dockerfile
+    depends_on:
+      - backend
     ports:
       - "8081:80"
     restart: always
@@ -58,9 +62,9 @@ services:
       - "traefik.http.routers.frontend.tls.certresolver=myresolver"
     networks:
       - traefik
-  mysql:
+  db:
     image: mysql:8.0
-    container_name: mysql
+    container_name: db
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: mydatabase
